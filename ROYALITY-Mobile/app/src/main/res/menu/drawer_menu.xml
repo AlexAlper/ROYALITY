@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/bonuses"
+            android:icon="@drawable/ic_bonuses"
+            android:title="@string/bonuses" />
+        <item
+            android:id="@+id/shares"
+            android:icon="@drawable/ic_shares"
+            android:title="@string/shares" />
+        <item
+            android:id="@+id/loyalty_programs"
+            android:icon="@drawable/ic_loyalty_programs"
+            android:title="@string/loyalty_programs" />
+        <item
+            android:id="@+id/polls"
+            android:icon="@drawable/ic_polls"
+            android:title="@string/polls" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout" />
+    </group>
+
+    <!--<item android:title="@string/feedback">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/share" />
+        </menu>
+    </item>-->
+
+</menu>

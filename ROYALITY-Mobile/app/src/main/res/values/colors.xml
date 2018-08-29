@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="login_background">#293b72</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#f4a4a4a4</color>
+    <color name="login_button">#5d6fa3</color>
+
+    <color name="default_drawer_item">#535353</color>
+    <!--<color name="selected_drawer_item">#378AAE</color>-->
+    <color name="selected_drawer_item">#4187a9</color>
+</resources>

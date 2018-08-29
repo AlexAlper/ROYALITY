@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Royality</string>
+    <string name="base_url">http://40.127.172.7:10009/</string>
+
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="or">ИЛИ</string>
+    <string name="sign_in">ВОЙТИ</string>
+    <string name="sing_up">ЗАРЕГИСТРИРОВАТЬСЯ</string>
+    <string name="number">Телефон</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="profile">Профиль</string>
+    <string name="bonuses">Бонусы</string>
+    <string name="shares">Акции</string>
+    <string name="loyalty_programs">Программы лояльности</string>
+    <string name="polls">Опросы</string>
+    <string name="settings">Настройки</string>
+    <string name="logout">Выйти</string>
+    <string name="user_name">UserName</string>
+    <string name="city">City</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="empty_fields">Поля не могут быть пустыми</string>
+    <string name="user_not_found">Пользователь не найден</string>
+</resources>
