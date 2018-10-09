@@ -1,4 +1,4 @@
-package com.example.user;
+package com.example.company;
 
 import com.example.core.helpers.Commands;
 import com.example.core.helpers.IterableHelper;
@@ -7,12 +7,13 @@ import net.corda.core.contracts.Contract;
 import net.corda.core.contracts.CommandData;
 import net.corda.core.contracts.CommandWithParties;
 import net.corda.core.transactions.LedgerTransaction;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
-public class ContractUser implements Contract {
-    public static final String DOC_CONTRACT_ID = "com.example.user.ContractUser";
+public class ContractOffer implements Contract {
+    public static final String DOC_CONTRACT_ID = "com.example.company.ContractOffer";
 
     @Override
     public void verify(LedgerTransaction tx) throws IllegalArgumentException {
@@ -22,24 +23,21 @@ public class ContractUser implements Contract {
         final CommandWithParties<CommandData> command = IterableHelper.onlyElementOf(commands);
 
         if (command.getValue() instanceof Commands.Create) {
-            final StateUser state = tx.outputsOfType(StateUser.class).get(0);
+            final StateOffer state = tx.outputsOfType(StateOffer .class).get(0);
             // final CommandWithParties<Commands.Create> command = requireSingleCommand(tx.getCommands(), Commands.Create.class);
             requireThat(requirements -> {
-                requirements.using("Inputs should not exist: Входов транзакции при создании документа быть не должно", tx.getInputs().isEmpty());
-                requirements.using("Поле ID не заполнено ",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_id()));
-                requirements.using("Correspondent is required: Поле Имя не заполнено",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_name()));
+
+                requirements.using(" Поле ID не заполнено ",
+                        !StringHelper.isEmptyOrWhitespace(state.getId()));
+
                 return null;
             });
         } else if (command.getValue() instanceof Commands.Edit) {
-            final StateUser state = tx.outputsOfType(StateUser.class).get(0);
+            final StateOffer  state = tx.outputsOfType(StateOffer .class).get(0);
             requireThat(requirements -> {
-                requirements.using("No input data: входы транзакции должны существовать ", !tx.getInputs().isEmpty());
-                requirements.using("DocNumber is required: Поле ID не заполнено ",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_id()));
-                requirements.using("Correspondent is required: Поле Имя не заполнено",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_name()));
+                requirements.using("Поле оферта не заполнено ",
+                        !StringHelper.isEmptyOrWhitespace(state.getId()));
+
                 return null;
             });
         } else if (command.getValue() instanceof Commands.Delete) {

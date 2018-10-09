@@ -1,7 +1,8 @@
-package com.example.user;
+package com.example.company;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.example.core.helpers.Commands;
+import com.example.flow.BaseFlow;
 import net.corda.core.contracts.Command;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.contracts.StateAndContract;
@@ -12,24 +13,23 @@ import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
-import com.example.flow.BaseFlow;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
-public abstract class FlowUser {
+public abstract class FlowOffer {
 
     @InitiatingFlow
     @StartableByRPC
     public static class Initiator extends BaseFlow {
-
-        private final String cor_id;
-        private final String cor_name;
+        private final String id;
         private final String phone;
-        private final String cor_bill_1;
-        private final String cor_bill_2;
         private final String city;
+        private final String name;
+
 
         private final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction based on new IOU.");
         private final ProgressTracker.Step VERIFYING_TRANSACTION = new ProgressTracker.Step("Verifying contract constraints.");
@@ -59,13 +59,12 @@ public abstract class FlowUser {
         );
 
 
-        public Initiator(String cor_id, String cor_name, String phone, String cor_bill_1, String cor_bill_2, String city) {
-            this.cor_id = cor_id;
-            this.cor_name = cor_name;
+        public Initiator(String id, String phone, String city, String name) {
+            this.id = id;
             this.phone = phone;
-            this.cor_bill_1 = cor_bill_1;
-            this.cor_bill_2 = cor_bill_2;
             this.city = city;
+            this.name = name;
+
         }
 
         @Suspendable
@@ -81,14 +80,14 @@ public abstract class FlowUser {
             Set<Party> allParties = new HashSet<>();
             allParties.add(currentParty);
             allParties.addAll(otherParties);
-            StateUser state = new StateUser(cor_id, cor_name, phone, cor_bill_1, cor_bill_2, city,  allParties, new UniqueIdentifier());
+            StateOffer state = new StateOffer(id, phone, city, name, allParties, new UniqueIdentifier());
 
             final Command<Commands.Create> txCommand = new Command<>(
                     new Commands.Create(),
                     state.getParticipants().stream().map(AbstractParty::getOwningKey).collect(Collectors.toList())
             );
             final TransactionBuilder txBuilder = new TransactionBuilder(notary).withItems(
-                    new StateAndContract(state, ContractUser.DOC_CONTRACT_ID), txCommand
+                    new StateAndContract(state, ContractOffer.DOC_CONTRACT_ID), txCommand
             );
 
             // Шаг 2
@@ -131,9 +130,7 @@ public abstract class FlowUser {
 
         private final FlowSession otherPartyFlow;
 
-        public Acceptor(FlowSession otherPartyFlow) {
-            this.otherPartyFlow = otherPartyFlow;
-        }
+        public Acceptor(FlowSession otherPartyFlow) { this.otherPartyFlow = otherPartyFlow; }
 
         @Suspendable
         @Override
@@ -147,7 +144,7 @@ public abstract class FlowUser {
                 protected void checkTransaction(SignedTransaction stx) {
                     requireThat(require -> {
                         ContractState output = stx.getTx().getOutputs().get(0).getData();
-                        require.using("This must be an DocState transaction.", output instanceof StateUser);
+                        require.using("This must be an DocState transaction.", output instanceof StateOffer);
                         return null;
                     });
                 }

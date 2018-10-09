@@ -38,15 +38,27 @@ public abstract class EditFlowUser {
             return cor_id;
         }
 
-        public String getBill() {
-            return bill;
+        public String GetCor_name() { return cor_name; }
+
+        public  String GetPhone() {return  phone;}
+
+        public String getCor_bill_1() {
+            return cor_bill_1;
         }
 
+        public String getCor_bill_2() {
+            return cor_bill_2;
+        }
+
+        public String getCity(){return city;}
 
         private final UniqueIdentifier linearId;
         private final String cor_id;
-        private final String bill;
-
+        private final String cor_name;
+        private final String phone;
+        private final String cor_bill_1;
+        private final String cor_bill_2;
+        private final String city;
 
         private final ProgressTracker.Step GET_INPUT_STATES = new ProgressTracker.Step("Get input states");
         private final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction based on new IOU.");
@@ -77,10 +89,14 @@ public abstract class EditFlowUser {
                 FINALISING_TRANSACTION
         );
 
-        public Initiator(String cor_id, String bill,  UniqueIdentifier linearId) {
+        public Initiator(String cor_id, String cor_name, String phone, String cor_bill_1, String cor_bill_2, String city,  UniqueIdentifier linearId) {
             this.linearId = linearId;
             this.cor_id = cor_id;
-            this.bill = bill;
+            this.cor_name = cor_name;
+            this.phone = phone;
+            this.cor_bill_1 = cor_bill_1;
+            this.cor_bill_2 = cor_bill_2;
+            this.city = city;
 
         }
 
@@ -111,7 +127,7 @@ public abstract class EditFlowUser {
             allParties.add(currentParty);
             allParties.addAll(otherParties);
 
-            StateUser newDocState = new StateUser(cor_id, bill, allParties, linearId);
+            StateUser newDocState = new StateUser(cor_id, cor_name, phone, cor_bill_1, cor_bill_2, city, allParties, linearId);
 
             // Contract: создаём контакт и объединяем с выходным состоянием
             StateAndContract outputState = new StateAndContract(newDocState, ContractUser.DOC_CONTRACT_ID);

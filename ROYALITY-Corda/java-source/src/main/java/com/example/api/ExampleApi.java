@@ -21,6 +21,7 @@ import com.example.DTO.*;
 import net.corda.core.messaging.FlowProgressHandle;
 import java.util.ArrayList;
 import com.example.user.*;
+import com.example.company.*;
 
 
 import javax.ws.rs.*;
@@ -104,18 +105,25 @@ public class ExampleApi {
     @PUT
     @Path("create-user")
     public Response createCor(@QueryParam("cor_id") String cor_id,
-                              @QueryParam("bill") String bill
-
+                              @QueryParam("cor_name") String cor_name,
+                              @QueryParam("phone") String phone,
+                              @QueryParam("cor_bill_1") String cor_bill_1,
+                              @QueryParam("cor_bill_2") String cor_bill_2,
+                              @QueryParam("city") String city
     )
     {
         if (StringHelper.isEmptyOrWhitespace(cor_id) ||
-                StringHelper.isEmptyOrWhitespace(bill)){
+                StringHelper.isEmptyOrWhitespace(cor_name) ||
+                StringHelper.isEmptyOrWhitespace(phone) ||
+                StringHelper.isEmptyOrWhitespace(cor_bill_1) ||
+                StringHelper.isEmptyOrWhitespace(cor_bill_2) ||
+                StringHelper.isEmptyOrWhitespace(city)){
             return Response.status(BAD_REQUEST).entity("Полня должны быть заданы").build();
         }
 
         try {
             FlowProgressHandle<SignedTransaction> flowHandle = rpcOps
-                    .startTrackedFlowDynamic(FlowUser.Initiator.class, cor_id, bill);
+                    .startTrackedFlowDynamic(FlowUser.Initiator.class, cor_id, cor_name, phone, cor_bill_1, cor_bill_2, city);
             flowHandle.getProgress().subscribe(evt -> System.out.printf(">> %s\n", evt));
 
             // The line below blocks and waits for the flow to return.
@@ -155,7 +163,11 @@ public class ExampleApi {
             FlowProgressHandle<SignedTransaction> flowHandle = rpcOps
                     .startTrackedFlowDynamic(EditFlowUser.Initiator.class,
                             StringHelper.getValueOrDefault(CorStateDTO.getCor_id()),
-                            StringHelper.getValueOrDefault(CorStateDTO.getBill()),
+                            StringHelper.getValueOrDefault(CorStateDTO.getCor_name()),
+                            StringHelper.getValueOrDefault(CorStateDTO.getPhone()),
+                            StringHelper.getValueOrDefault(CorStateDTO.getCor_bill_1()),
+                            StringHelper.getValueOrDefault(CorStateDTO.getCor_bill_2()),
+                            StringHelper.getValueOrDefault(CorStateDTO.getCity()),
                             CorStateDTO.getLinearId()
 
                     );
@@ -173,7 +185,53 @@ public class ExampleApi {
         }
     }
 
+    @PUT
+    @Path("create-offer")
+    public Response createOffer(@QueryParam("id") String id,@QueryParam("phone") String phone,@QueryParam("city") String city,
+                                @QueryParam("name") String name)
 
+    {
+        if (StringHelper.isEmptyOrWhitespace(id) || StringHelper.isEmptyOrWhitespace(phone) ||StringHelper.isEmptyOrWhitespace(city) ||StringHelper.isEmptyOrWhitespace(name) ) {
+            return Response.status(BAD_REQUEST).entity("Оферта должна быть задана").build();
+        }
+
+        try {
+            FlowProgressHandle<SignedTransaction> flowHandle = rpcOps
+                    .startTrackedFlowDynamic(FlowOffer.Initiator.class, id, phone, city, name);
+            flowHandle.getProgress().subscribe(evt -> System.out.printf(">> %s\n", evt));
+
+            // The line below blocks and waits for the flow to return.
+            final SignedTransaction result = flowHandle
+                    .getReturnValue()
+                    .get();
+
+            final String msg = String.format("Transaction id %s committed to ledger.\n", result.getId());
+            return Response.status(CREATED).entity(msg).build();
+
+        } catch (Throwable ex) {
+            final String msg = ex.getMessage();
+            logger.error(ex.getMessage(), ex);
+            return Response.status(BAD_REQUEST).entity(msg).build();
+        }
+    }
+    @GET
+    @Path("get-offer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<OfferDTO> getOffer() {
+        List<StateAndRef<StateOffer>> allOffer = rpcOps.vaultQuery(StateOffer.class).getStates();
+        List<OfferDTO> resultList = new ArrayList<>();
+
+        try {
+            if (allOffer != null) {
+                for (StateAndRef<StateOffer> sr : allOffer) {
+                    resultList.add(sr.getState().component1().createDTO());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultList;
+    }
 
 
 }
