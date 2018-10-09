@@ -28,8 +28,6 @@ public class ContractUser implements Contract {
                 requirements.using("Inputs should not exist: Входов транзакции при создании документа быть не должно", tx.getInputs().isEmpty());
                 requirements.using("Поле ID не заполнено ",
                         !StringHelper.isEmptyOrWhitespace(state.getCor_id()));
-                requirements.using("Correspondent is required: Поле Имя не заполнено",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_name()));
                 return null;
             });
         } else if (command.getValue() instanceof Commands.Edit) {
@@ -38,8 +36,6 @@ public class ContractUser implements Contract {
                 requirements.using("No input data: входы транзакции должны существовать ", !tx.getInputs().isEmpty());
                 requirements.using("DocNumber is required: Поле ID не заполнено ",
                         !StringHelper.isEmptyOrWhitespace(state.getCor_id()));
-                requirements.using("Correspondent is required: Поле Имя не заполнено",
-                        !StringHelper.isEmptyOrWhitespace(state.getCor_name()));
                 return null;
             });
         } else if (command.getValue() instanceof Commands.Delete) {

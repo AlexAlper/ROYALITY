@@ -33,10 +33,6 @@
       <div class="row">
     <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-10">
-        <button ng-click="demoApp.openOffer()" type="button" class="btn btn-default navbar-btn">Создать оферту
-        </button>
-    </div>
 </div>
 
 <div class="row">
@@ -65,23 +61,13 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Имя</th>
-                        <th>Телефон</th>
-                        <th>Счет компании</th>
-                        <th>Счет коалиции</th>
-                        <th>Город</th>
+                        <th>Счет</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in demoApp.items" class="panel panel-default">
                         <td>{{item.cor_id}}</td>
-                        <td>{{item.cor_name}}</td>
-                        <td>{{item.phone}}</td>
-						<td>{{item.cor_bill_1}}</td>
-						<td>{{item.cor_bill_2}}</td>
-                        <td>{{item.city}}</td>
-
-                        
+                        <td>{{item.bill}}</td>                        
                        <td>
                             <button type="button" class="btn btn-default btn-sm"
                                     ng-click="demoApp.openModal(item)">
@@ -95,98 +81,6 @@
         </div>
     </div>
 </div>
-
-
-<div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Профиль компаний:</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Название</th>
-                        <th>Телефон</th>
-                        <th>Город</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="offer in demoApp.offers" class="panel panel-default">
-                        <td>{{offer.id}}</td>
-                        <td>{{offer.name}}</td>
-                        <td>{{offer.phone}}</td>
-                        <td>{{offer.city}}</td>
-                        
-                       <td>
-                            <button type="button" class="btn btn-default btn-sm"
-                                    ng-click="demoApp.openOffer(offer)">
-                                <span class="glyphicon glyphicon-edit"></span> Изменить
-                            </button>
-                        </td>  
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<script type="text/ng-template" id="Offer.html">
-    <div class="modal-header">
-        <h4 class="modal-title">Eaa</h4>
-    </div>
-    <form name="createItemForm">
-        <div class="modal-body">
-            <div class="form-group" ng-class="{'has-error':createItemForm.idField.$invalid}">
-                <label for="idField" class="control-label">Компания</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.id" class="form-control" id="id" name="id">
-            </div>
-
-            <div class="form-group" ng-class="{'has-error':createItemForm.idField.$invalid}">
-                <label for="idField" class="control-label">Компания</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.phone" class="form-control" id="phone" name="phone">
-            </div>
-
-            <div class="form-group" ng-class="{'has-error':createItemForm.idField.$invalid}">
-                <label for="idField" class="control-label">Компания</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.city" class="form-control" id="city" name="city">
-            </div>
-
-            <div class="form-group" ng-class="{'has-error':createItemForm.idField.$invalid}">
-                <label for="idField" class="control-label">Компания</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.name" class="form-control" id="name" name="name">
-            </div>
-            
-            <div ng-show="modalInstance.formError" class="form-group">
-                <div class="alert alert-danger" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Ошибка:</span>
-                    Заполните обязательные поля
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Отмена</button>
-            <button ng-click="modalInstance.createOfert()" type="button" class="btn btn-primary"
-                    ng-if="!modalInstance.isEditMode">Создать
-            </button>
-            <button ng-click="modalInstance.save()" type="button" class="btn btn-primary"
-                    ng-if="modalInstance.isEditMode">Сохранить
-            </button>
-        </div>
-    </form>
-</script>
 
 
 
@@ -204,36 +98,14 @@
                 <input type="text" required
                        ng-model="modalInstance.form.cor_id" class="form-control" id="cor_id" name="cor_id">
             </div>
-            <div class="form-group" ng-class="{'has-error':createItemForm.name.$invalid}">
-                <label for="name" class="control-label">Имя</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.cor_name" class="form-control" id="cor_name" name="cor_name">
-            </div>
-
+          
+                         
              <div class="form-group" ng-class="{'has-error':createItemForm.name.$invalid}">
-                <label for="phone" class="control-label">Телефон</label>
+                <label for="bill" class="control-label">Счет компании</label>
                 <input type="text" required
-                       ng-model="modalInstance.form.phone" class="form-control" id="phone" name="phone">
+                       ng-model="modalInstance.form.bill" class="form-control" id="bill" name="bill">
             </div>
-
-             <div class="form-group" ng-class="{'has-error':createItemForm.name.$invalid}">
-                <label for="bill_company" class="control-label">Счет компании</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.cor_bill_1" class="form-control" id="cor_bill_1" name="cor_bill_1">
-            </div>
-
-             <div class="form-group" ng-class="{'has-error':createItemForm.name.$invalid}">
-                <label for="bill_coalition" class="control-label">Счет коалиции</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.cor_bill_2" class="form-control" id="cor_bill_2" name="cor_bill_2">
-            </div>
-
-            <div class="form-group" ng-class="{'has-error':createItemForm.name.$invalid}">
-                <label for="city" class="control-label">Город</label>
-                <input type="text" required
-                       ng-model="modalInstance.form.city" class="form-control" id="city" name="city">
-            </div>
-
+                         
 
             <div ng-show="modalInstance.formError" class="form-group">
                 <div class="alert alert-danger" role="alert">

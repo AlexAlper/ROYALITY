@@ -8,11 +8,18 @@ import net.corda.core.contracts.StateAndContract;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.*;
 import net.corda.core.identity.AbstractParty;
+import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 import com.example.flow.BaseFlow;
+import net.corda.core.node.services.*;
+import net.corda.core.messaging.*;
+import org.eclipse.jetty.util.ssl.X509;
+import sun.security.x509.X500Name;
+
+import javax.servlet.http.Part;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,11 +32,7 @@ public abstract class FlowUser {
     public static class Initiator extends BaseFlow {
 
         private final String cor_id;
-        private final String cor_name;
-        private final String phone;
-        private final String cor_bill_1;
-        private final String cor_bill_2;
-        private final String city;
+        private final String bill;
 
         private final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction based on new IOU.");
         private final ProgressTracker.Step VERIFYING_TRANSACTION = new ProgressTracker.Step("Verifying contract constraints.");
@@ -59,20 +62,32 @@ public abstract class FlowUser {
         );
 
 
-        public Initiator(String cor_id, String cor_name, String phone, String cor_bill_1, String cor_bill_2, String city) {
+        public Initiator(String cor_id, String bill) {
             this.cor_id = cor_id;
-            this.cor_name = cor_name;
-            this.phone = phone;
-            this.cor_bill_1 = cor_bill_1;
-            this.cor_bill_2 = cor_bill_2;
-            this.city = city;
+            this.bill = bill;
+
         }
 
         @Suspendable
         @Override
         public SignedTransaction call() throws FlowException {
             final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
+         //  Party otherParties = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
             Set<Party> otherParties = this.getAllPartiesWithoutMe();
+            CordaX500Name name = new CordaX500Name("PartyA","London","GB");
+            Party partis = getServiceHub().getNetworkMapCache().getPeerByLegalName(name);
+
+           // for (Party otherParty : otherParties) {
+            //        partis = otherParty;
+             //   }
+
+
+
+            //     for (Party otherParty : Parties) {
+           //           if(otherParty.getName() == node){
+             //                       otherParties = otherParty;
+             //           }
+          // }
 
             // Шаг 1
             progressTracker.setCurrentStep(GENERATING_TRANSACTION);
@@ -80,8 +95,8 @@ public abstract class FlowUser {
             Party currentParty = getServiceHub().getMyInfo().getLegalIdentities().get(0);
             Set<Party> allParties = new HashSet<>();
             allParties.add(currentParty);
-            allParties.addAll(otherParties);
-            StateUser state = new StateUser(cor_id, cor_name, phone, cor_bill_1, cor_bill_2, city,  allParties, new UniqueIdentifier());
+            allParties.add(partis);
+            StateUser state = new StateUser(cor_id, bill,  allParties, new UniqueIdentifier());
 
             final Command<Commands.Create> txCommand = new Command<>(
                     new Commands.Create(),
@@ -103,10 +118,12 @@ public abstract class FlowUser {
 
             Set<FlowSession> flowSessions = new HashSet<>();
 
-            for (Party otherParty : otherParties) {
-                FlowSession otherPartySession = initiateFlow(otherParty);
-                flowSessions.add(otherPartySession);
-            }
+            //for (Party otherParty : otherParties) {
+            //    if(otherParty.getName() == node) {
+                    FlowSession otherPartySession = initiateFlow( partis);
+                    flowSessions.add(otherPartySession);
+              //  }
+            //}
 
             // Шаг 4
             progressTracker.setCurrentStep(GATHERING_SIGS);

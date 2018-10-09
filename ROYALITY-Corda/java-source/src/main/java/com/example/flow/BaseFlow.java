@@ -22,6 +22,9 @@ public abstract class BaseFlow extends FlowLogic<SignedTransaction> {
             add("PartyA");
             add("PartyB");
             add("PartyC");
+            add("PartyD");
+            add("PartyE");
+            add("PartyF");
         }};
 
         Set<Party> additionalParties = new HashSet<>();

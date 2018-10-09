@@ -22,23 +22,16 @@ import java.util.Set;
 public class StateUser implements LinearState, QueryableState{
     private final UniqueIdentifier linearId;
     private final String cor_id;
-    private final String cor_name;
-    private final String phone;
-    private final String cor_bill_1;
-    private final String cor_bill_2;
-    private final String city;
+    private final String bill;
+
     private final Set<Party> parties;
 
 
 
-    public StateUser(String cor_id, String cor_name, String phone, String cor_bill_1, String cor_bill_2, String city, Set<Party> parties, UniqueIdentifier linearId){
+    public StateUser(String cor_id, String bill,  Set<Party> parties, UniqueIdentifier linearId){
         this.linearId = linearId;
         this.cor_id = cor_id;
-        this.cor_name = cor_name;
-        this.phone = phone;
-        this.cor_bill_1 = cor_bill_1;
-        this.cor_bill_2 = cor_bill_2;
-        this.city = city;
+        this.bill = bill;
         this.parties = parties;
     }
 
@@ -47,23 +40,10 @@ public class StateUser implements LinearState, QueryableState{
         return  cor_id;
     }
 
-    public String getCor_name(){
-        return cor_name;
+    public String getBill(){
+        return bill;
     }
 
-    public String getPhone(){
-        return phone;
-    }
-
-    public String getCor_bill_1(){
-        return cor_bill_1;
-    }
-
-    public String getCor_bill_2(){
-        return cor_bill_2;
-    }
-
-    public String getCity() {return city;}
 
     @NotNull
     @Override
@@ -84,11 +64,8 @@ public class StateUser implements LinearState, QueryableState{
             return new DocSchemaV2.PersistentDoc(
                     this.linearId.getId(),
                     this.cor_id,
-                    this.cor_name,
-                    this.phone,
-                    this.cor_bill_1,
-                    this.cor_bill_2,
-                    this.city
+                    this.bill
+
             );
         } else {
             //throw new IllegalAccessException("Неопознанная схема $schema");
@@ -107,11 +84,7 @@ public class StateUser implements LinearState, QueryableState{
         UserDTO CorStateDTO = new UserDTO();
         CorStateDTO.setLinearId(this.linearId);
         CorStateDTO.setCor_id(this.cor_id);
-        CorStateDTO.setCor_name(this.cor_name);
-        CorStateDTO.setPhone(this.phone);
-        CorStateDTO.setCor_bill_1(this.cor_bill_1);
-        CorStateDTO.setCor_bill_2(this.cor_bill_2);
-        CorStateDTO.setCity(this.city);
+        CorStateDTO.setBill(this.bill);
         return CorStateDTO;
     }
 
